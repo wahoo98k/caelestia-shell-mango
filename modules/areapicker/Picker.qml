@@ -1,14 +1,13 @@
 pragma ComponentBehavior: Bound
 
 import QtQuick
-import QtQuick.Effects
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import Caelestia
 import qs.components
+import qs.components.effects
 import qs.services
-import qs.config
 
 MouseArea {
     id: root
@@ -42,7 +41,7 @@ MouseArea {
         const special = mon.lastIpcObject.specialWorkspace;
         const wsId = special.name ? special.id : mon.activeWorkspace.id;
 
-        return Hypr.toplevels.values.filter(c => c.workspace?.id === wsId).sort((a, b) => {
+        return Hypr.toplevelsForWs(wsId).sort((a, b) => {
             // Pinned first, then fullscreen, then floating, then any other
             const ac = a.lastIpcObject;
             const bc = b.lastIpcObject;
@@ -167,19 +166,19 @@ MouseArea {
                 target: root
                 property: "opacity"
                 to: 0
-                duration: Appearance.anim.durations.large
+                type: Anim.StandardLarge
             }
-            ExAnim {
+            Anim {
                 target: root
                 properties: "rsx,rsy"
                 to: 0
             }
-            ExAnim {
+            Anim {
                 target: root
                 property: "sw"
                 to: root.screen.width
             }
-            ExAnim {
+            Anim {
                 target: root
                 property: "sh"
                 to: root.screen.height
@@ -231,12 +230,9 @@ MouseArea {
         opacity: 0.3
 
         layer.enabled: true
-        layer.effect: MultiEffect {
+        layer.effect: Mask {
             maskSource: selectionWrapper
-            maskEnabled: true
             maskInverted: true
-            maskSpreadAtMin: 1
-            maskThresholdMin: 0.5
         }
     }
 
@@ -278,36 +274,31 @@ MouseArea {
 
     Behavior on opacity {
         Anim {
-            duration: Appearance.anim.durations.large
+            type: Anim.StandardLarge
         }
     }
 
     Behavior on rsx {
         enabled: !root.pressed
 
-        ExAnim {}
+        Anim {}
     }
 
     Behavior on rsy {
         enabled: !root.pressed
 
-        ExAnim {}
+        Anim {}
     }
 
     Behavior on sw {
         enabled: !root.pressed
 
-        ExAnim {}
+        Anim {}
     }
 
     Behavior on sh {
         enabled: !root.pressed
 
-        ExAnim {}
-    }
-
-    component ExAnim: Anim {
-        duration: Appearance.anim.durations.expressiveDefaultSpatial
-        easing.bezierCurve: Appearance.anim.curves.expressiveDefaultSpatial
+        Anim {}
     }
 }

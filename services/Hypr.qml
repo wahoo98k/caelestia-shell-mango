@@ -34,6 +34,29 @@ QtObject {
 
     signal configReloaded
 
+    // Added when merging upstream: 684 commits introduced callers of these on
+    // Hypr, and the shim predates them. Mango exposes no equivalents.
+    //
+    // usingLua gates Hyprland's Lua dispatch syntax (IdleMonitors, Bar); mango
+    // has no Lua config, so the plain-string branch is always the right one.
+    readonly property bool usingLua: false
+
+    function isToplevelIgnored(toplevel): bool {
+        return !toplevel;
+    }
+
+    // mango's Wayland toplevel list carries no per-window tag, so every window
+    // is reported for any workspace. Callers (areapicker/Picker, Workspace,
+    // SpecialWorkspaces) use this for previews and counts -- previews are
+    // already known-broken on mango, and counts degrade to a total.
+    function toplevelsForWs(ws): var {
+        return toplevels.values.filter(t => !isToplevelIgnored(t));
+    }
+
+    function listSpecialWorkspaces(): var {
+        return [];
+    }
+
     function dispatch(request: string): void {
         Services.Mango.dispatch(request);
     }

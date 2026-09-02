@@ -4,9 +4,9 @@ import QtQuick
 import QtQuick.Layouts
 import Quickshell
 import Quickshell.Wayland
+import Caelestia.Config
 import qs.components
 import qs.services
-import qs.config
 
 Item {
     id: root
@@ -24,13 +24,13 @@ Item {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.top: parent.top
         anchors.bottom: label.top
-        anchors.topMargin: Appearance.padding.large
-        anchors.bottomMargin: Appearance.spacing.normal
+        anchors.topMargin: Tokens.padding.large
+        anchors.bottomMargin: Tokens.spacing.medium
 
         implicitWidth: view.implicitWidth
 
         color: Colours.tPalette.m3surfaceContainer
-        radius: Appearance.rounding.small
+        radius: Tokens.rounding.medium
 
         Loader {
             asynchronous: true
@@ -44,22 +44,21 @@ Item {
                     Layout.alignment: Qt.AlignHCenter
                     text: "web_asset_off"
                     color: Colours.palette.m3outline
-                    font.pointSize: Appearance.font.size.extraLarge * 3
+                    fontStyle: Tokens.font.icon.builders.extraLarge.scale(3).build()
                 }
 
                 StyledText {
                     Layout.alignment: Qt.AlignHCenter
                     text: qsTr("No active client")
                     color: Colours.palette.m3outline
-                    font.pointSize: Appearance.font.size.extraLarge
-                    font.weight: 500
+                    font: Tokens.font.body.builders.large.size(28).weight(Font.Medium).build()
                 }
 
                 StyledText {
                     Layout.alignment: Qt.AlignHCenter
                     text: qsTr("Try switching to a window")
                     color: Colours.palette.m3outline
-                    font.pointSize: Appearance.font.size.large
+                    font: Tokens.font.body.large
                 }
             }
         }
@@ -82,7 +81,7 @@ Item {
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: Appearance.padding.large
+        anchors.bottomMargin: Tokens.padding.large
 
         animate: true
         text: {
